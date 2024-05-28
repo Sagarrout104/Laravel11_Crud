@@ -12,10 +12,20 @@
 
 <body>
     <nav class="navbar" style="background-color: #e3f2fd;">
-        <div class="container-fluid">
+        <div class="container">
             <a class="navbar-brand" href="#">
                 CRUD
             </a>
+            <div>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a href="{{ route('logout') }}" class="btn btn-outline-danger"
+                        onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                        Log Out
+                    </a>
+                </form>
+            </div>
         </div>
     </nav>
 

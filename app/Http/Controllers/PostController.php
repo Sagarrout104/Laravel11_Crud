@@ -7,6 +7,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -27,6 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Post::class);
         $categories = Category::all();
         return view("create", compact("categories"));
     }
@@ -73,6 +75,8 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
+
+        Gate::authorize('update', Post::class);
         $categories = Category::all();
         $post = Post::find($id);
         return view("edit", compact("post", "categories"));
@@ -132,6 +136,8 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
+
+        Gate::authorize('delete', Post::class);
         $post = Post::findOrFail($id);
         $post->delete();
         return redirect()->route('post.index')->with('success', 'Deleted successfully');
@@ -139,7 +145,7 @@ class PostController extends Controller
 
     public function trash()
     {
-
+        Gate::authorize('delete', Post::class);
         $allTrash = Post::onlyTrashed()->get();
         return view('trash', compact('allTrash'));
     }
@@ -151,6 +157,7 @@ class PostController extends Controller
     }
     public function forceDelete($id)
     {
+
         $post = Post::onlyTrashed()->findOrFail($id);
         $post->forceDelete();
         File::delete($post->image);

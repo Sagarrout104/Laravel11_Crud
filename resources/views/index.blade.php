@@ -11,10 +11,12 @@
                     <div class="col-md-6">
                         <h4>All Posts</h4>
                     </div>
-                    <div class="col-md-6 d-flex justify-content-end">
-                        <a href="{{ route('post.create') }}" class="btn btn-success mx-1">Create</a>
-                        <a href="{{ route('post.trash') }}" class="btn btn-info mx-1">Trashed</a>
-                    </div>
+                    @can('create', App\Models\Post::class)
+                        <div class="col-md-6 d-flex justify-content-end">
+                            <a href="{{ route('post.create') }}" class="btn btn-success mx-1">Create</a>
+                            <a href="{{ route('post.trash') }}" class="btn btn-info mx-1">Trashed</a>
+                        </div>
+                    @endcan
                 </div>
 
             </div>
@@ -46,14 +48,18 @@
                                     <td>
                                         <a href="{{ route('post.show', $post->id) }}"
                                             class=" btn btn-sm btn-success">Show</a>
-                                        <a href="{{ route('post.edit', $post->id) }}"
-                                            class=" btn btn-sm btn-primary">Edit</a>
-                                        <form action="{{ route('post.destroy', $post->id) }}" method="post"
-                                            class=" d-inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn-sm btn btn-danger">Delete</button>
-                                        </form>
+                                        @can('update', App\Models\Post::class)
+                                            <a href="{{ route('post.edit', $post->id) }}"
+                                                class=" btn btn-sm btn-primary">Edit</a>
+                                        @endcan
+                                        @can('delete', App\Models\Post::class)
+                                            <form action="{{ route('post.destroy', $post->id) }}" method="post"
+                                                class=" d-inline-block">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn-sm btn btn-danger">Delete</button>
+                                            </form>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
